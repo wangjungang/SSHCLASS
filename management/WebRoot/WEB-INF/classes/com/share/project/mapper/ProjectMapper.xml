@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.share.project.DAO.ProjectDAO">
+	
+	<!-- 如果是自己上面定义的实体类，用resultMap
+	 
+		<select id="getList" resultMap="BaseResultMap" parameterType="function.stu.bean.Student"> 
+			SELECT * FROM tStudent 
+		</select> 
+	 -->
+
+	<!-- 如果是JAVA的MAP，可以用resultType，注意是Map的实现类，如HashMap --> 
+	
+	<!-- 得到Project表 -->
+	<select id="getProjectList" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM projecttable 
+	</select>
+	
+	<!-- 得到Project人员分配信息表 -->
+	<select id="getProjectAllotList" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM emptable a,projecttable b,allottable c where a.iId=c.empId and
+		 b.iId=c.projectId 
+		 <if test="null != iId ">
+			 b.iId=#{iId,jdbcType=INTEGER}
+		 </if>
+	</select>
+	
+	<!-- 得到personProject表 -->
+	<select id="getProjectPersonList" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM projecttable where iPerson1=#{userId,jdbcType=INTEGER} or 
+		iPerson2=#{userId,jdbcType=INTEGER} or iPerson3=#{userId,jdbcType=INTEGER} or
+		iPerson4=#{userId,jdbcType=INTEGER} or iPerson5=#{userId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 得到emp表 -->
+	<select id="getEmpList" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM emptable where sPosition=#{sPosition,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 通过iperson列得到一行project信息表 -->
+	<select id="getPersonRow" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM emptable where 1=1
+			<if test="null != iPerson1 ">  
+                and iId=#{iPerson1,jdbcType=INTEGER}
+            </if>          
+            <if test="null != iPerson2 ">  
+               and  iId=#{iPerson2,jdbcType=INTEGER}
+            </if>
+            <if test="null != iPerson3 ">  
+               and iId=#{iPerson3,jdbcType=INTEGER} 
+            </if>
+            <if test="null != iPerson4 ">  
+               and iId=#{iPerson4,jdbcType=INTEGER}  
+            </if>          
+            <if test="null != iPerson5 ">  
+               and iId=#{iPerson5,jdbcType=INTEGER} 
+            </if>
+	</select>
+	
+	<!-- 得到一行project信息表 -->
+	<select id="getRow" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM projecttable where iId = #{iId,jdbcType=INTEGER} 
+	</select>
+	
+	<!-- 增加一行project信息表 -->
+  	<insert id="addRow" parameterType="java.util.Map" >
+    	insert into projecttable
+   		<trim prefix="(" suffix=")" suffixOverrides="," >
+				sPname,
+			<if test="null != sCustomer and !&quot;&quot;.equals(sCustomer.trim())">  
+                sCustomer,
+            </if>          
+            <if test="null != sEstimatedtime and !&quot;&quot;.equals(sEstimatedtime.trim())">  
+                sEstimatedtime,
+            </if>
+            <if test="null != sSpeed and !&quot;&quot;.equals(sSpeed.trim())">  
+                sSpeed,
+            </if>
+            <if test="null != sType and !&quot;&quot;.equals(sType.trim())">  
+                sType,
+            </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="null != sPname and !&quot;&quot;.equals(sPname.trim())">
+				#{sPname,jdbcType=VARCHAR},
+			</if>
+			<if test="null != sCustomer and !&quot;&quot;.equals(sCustomer.trim())">  
+                #{sCustomer,jdbcType=VARCHAR},
+            </if>          
+            <if test="null != sEstimatedtime and !&quot;&quot;.equals(sEstimatedtime.trim())">  
+               	#{sEstimatedtime,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sSpeed and !&quot;&quot;.equals(sSpeed.trim())">  
+                #{sSpeed,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sType and !&quot;&quot;.equals(sType.trim())">  
+                #{sType,jdbcType=VARCHAR},
+            </if>
+		</trim>
+	</insert>
+	
+	<!-- 删除一行项目信息表 -->
+	<update id="deleteRow" parameterType="java.util.Map">
+ 		DELETE From projecttable where iId = #{deleteId,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<!-- 修改一行项目信息表 -->
+ 	<update id="updateRow" parameterType="java.util.Map" >
+    	update projecttable
+	    <set>
+				sPname=#{sPname,jdbcType=VARCHAR},
+			<if test="null != sCustomer and !&quot;&quot;.equals(sCustomer.trim())">  
+                sCustomer=#{sCustomer,jdbcType=VARCHAR},
+            </if>          
+            <if test="null != sEstimatedtime and !&quot;&quot;.equals(sEstimatedtime.trim())">  
+                sEstimatedtime=#{sEstimatedtime,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sSpeed and !&quot;&quot;.equals(sSpeed.trim())">  
+                sSpeed=#{sSpeed,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sAssess ">  
+                sAssess=#{sAssess,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sType and !&quot;&quot;.equals(sType.trim())">  
+                sType=#{sType,jdbcType=VARCHAR},
+            </if>
+            <if test="null != iPerson1 ">  
+                iPerson1=#{iPerson1,jdbcType=INTEGER},
+            </if>          
+            <if test="null != iPerson2 ">  
+                iPerson2=#{iPerson2,jdbcType=INTEGER},
+            </if>
+            <if test="null != iPerson3 ">  
+                iPerson3=#{iPerson3,jdbcType=INTEGER},
+            </if>
+            <if test="null != iPerson4 ">  
+                iPerson4=#{iPerson4,jdbcType=INTEGER},
+            </if>          
+            <if test="null != iPerson5 ">  
+                iPerson5=#{iPerson5,jdbcType=INTEGER},
+            </if>
+	    </set>
+	    where iId = #{updateId,jdbcType=INTEGER}
+	    <!--  
+	    <choose>
+		    <when test="updateId instanceof Integer">
+	 		where iId = #{updateId,jdbcType=INTEGER}
+	 		</when>
+	 		<otherwise>
+	 		where iId in 
+		   	<foreach collection="updateId" item="item" open="(" separator="," close=")">
+		 	#{item}
+		 	</foreach>
+		 	</otherwise>
+	 	</choose>
+	 	-->
+  	</update>
+ 	
+	
+</mapper>

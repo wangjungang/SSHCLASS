@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.share.login.DAO.LoginDAO">
+	
+	
+	<!-- <sql id="Base_Column_List" > iId,sName,iAge </sql> -->
+	
+	<!-- 如果是自己上面定义的实体类，用resultMap
+	 
+		<select id="getList" resultMap="BaseResultMap" parameterType="function.stu.bean.Student"> 
+			SELECT * FROM tStudent 
+		</select> 
+	 -->
+
+	<!-- 如果是JAVA的MAP，可以用resultType，注意是Map的实现类，如HashMap --> 
+	<select id="getPassword" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM emptable where sName = #{sLoginName,jdbcType=VARCHAR} 
+	</select>
+</mapper>

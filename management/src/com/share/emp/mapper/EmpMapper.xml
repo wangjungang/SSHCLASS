@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.share.emp.DAO.EmpDAO">
+	
+	
+	<!-- <sql id="Base_Column_List" > iId,sName,iAge </sql> -->
+	
+	<!-- 如果是自己上面定义的实体类，用resultMap
+	 
+		<select id="getList" resultMap="BaseResultMap" parameterType="function.stu.bean.Student"> 
+			SELECT * FROM tStudent 
+		</select> 
+	 -->
+
+	<!-- 如果是JAVA的MAP，可以用resultType，注意是Map的实现类，如HashMap --> 
+	
+	<!-- 得到Emp表 -->
+	<select id="getEmpList" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM emptable 
+	</select>
+	
+	<!-- 得到一行Emp信息表 -->
+	<select id="getRow" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT*FROM emptable where iId = #{iId,jdbcType=INTEGER} 
+	</select>
+	
+	<!-- 增加一行emp信息表 -->
+  	<insert id="addRow" parameterType="java.util.Map" >
+    	insert into emptable
+   		<trim prefix="(" suffix=")" suffixOverrides="," >
+
+				sName,
+			<if test="null != iAge and !&quot;&quot;.equals(iAge.trim())">  
+                iAge,
+            </if>          
+            <if test="null != sSex and !&quot;&quot;.equals(sSex.trim())">  
+                sSex,
+            </if>
+            <if test="null != sPhone and !&quot;&quot;.equals(sPhone.trim())">  
+                sPhone,
+            </if>
+            <if test="null != sPassword and !&quot;&quot;.equals(sPassword.trim())">  
+                sPassword,
+            </if>
+            <if test="null != sPosition and !&quot;&quot;.equals(sPosition.trim())">  
+                sPosition,
+            </if>
+			    dtUpdate,
+           		dtInsert,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="null != sLoginName and !&quot;&quot;.equals(sLoginName.trim())">
+				#{sLoginName,jdbcType=VARCHAR},
+			</if>
+			<if test="null != iAge and !&quot;&quot;.equals(iAge.trim())">  
+                #{iAge,jdbcType=INTEGER},
+            </if>          
+            <if test="null != sSex and !&quot;&quot;.equals(sSex.trim())">  
+               	#{sSex,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sPhone and !&quot;&quot;.equals(sPhone.trim())">  
+                #{sPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sPassword and !&quot;&quot;.equals(sPassword.trim())">  
+                #{sPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sPosition and !&quot;&quot;.equals(sPosition.trim())">  
+                #{sPosition,jdbcType=VARCHAR},
+            </if>
+          	 now(),
+             now(),
+		</trim>
+	</insert>
+	
+	<!-- 删除一行emp信息表 -->
+	<update id="deleteRow" parameterType="java.util.Map">
+ 		DELETE From emptable where iId = #{deleteId,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<!-- 修改一行emp信息表 -->
+ 	<update id="updateRow" parameterType="java.util.Map" >
+    	update emptable
+	    <set>
+				sName=#{sLoginName,jdbcType=VARCHAR},
+			<if test="null != iAge and !&quot;&quot;.equals(iAge.trim())">  
+                iAge=#{iAge,jdbcType=INTEGER},
+            </if>          
+            <if test="null != sSex and !&quot;&quot;.equals(sSex.trim())">  
+                sSex=#{sSex,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sPhone and !&quot;&quot;.equals(sPhone.trim())">  
+                sPhone=#{sPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sPassword and !&quot;&quot;.equals(sPassword.trim())">  
+                sPassword=#{sPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="null != sPosition and !&quot;&quot;.equals(sPosition.trim())">  
+                sPosition=#{sPosition,jdbcType=VARCHAR},
+            </if>
+            	dtUpdate=now()
+	    </set>
+	    where iId = #{updateId,jdbcType=INTEGER}
+	    <!--  
+	    <choose>
+		    <when test="updateId instanceof Integer">
+	 		where iId = #{updateId,jdbcType=INTEGER}
+	 		</when>
+	 		<otherwise>
+	 		where iId in 
+		   	<foreach collection="updateId" item="item" open="(" separator="," close=")">
+		 	#{item}
+		 	</foreach>
+		 	</otherwise>
+	 	</choose>
+	 	-->
+  	</update>
+ 	
+	
+</mapper>
